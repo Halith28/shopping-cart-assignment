@@ -13,6 +13,7 @@ const RouterApp = () => {
             <Route exact path={Routes.home} component={Home} />
             <Route exact path={Routes?.login} component={Login} />
             <Route exact path={Routes?.signUp} component={SignUp} />
+            <Route exact path="/" component={SignUp} />
 
             <Route path="*" component={notFound} />
             </Switch>
