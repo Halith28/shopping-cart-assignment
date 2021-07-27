@@ -1,4 +1,12 @@
-import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  makeStyles,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import TopBar from "../../components/topBar";
 import axios from "axios";
@@ -9,10 +17,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgb(128 128 128 / 36%)",
     // height: "calc(100vh - 110px)",
     height: "100vh",
+    cursor: "pointer",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
   navigationButton: {
     borderBottom: "1px solid rgb(128 128 128 / 36%)",
-    padding: 10,
+    padding: 15,
   },
   productsGrid: {
     height: "calc(100vh - 110px)",
@@ -48,12 +60,28 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     borderRadius: 0,
   },
+  navigationMobile: {
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+    "& .MuiInputBase-input": {
+      color: "black",
+      backgroundColor: "#bf2957",
+    },
+    "& .MuiSelect-icon": {
+      color: "white",
+    },
+    "& .MuiFormLabel-root": {
+      color: "white",
+    },
+  },
 }));
 
 const Products = () => {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     axios
@@ -68,26 +96,71 @@ const Products = () => {
       .get("http://localhost:5000/products")
       .then((response) => {
         setProducts(response?.data);
+        setFilteredData(response?.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  function filterProducts(categoryId) {
+    const filteredData = products.filter(
+      (item) => item?.category === categoryId
+    );
+    setFilteredData(filteredData);
+  }
+
+  console.log(products);
   return (
     <>
       <TopBar />
       <Grid container>
-        <Grid item xs={2} className={classes.navigationGrid}>
+        <Grid item xs={12} sm={2} className={classes.navigationGrid}>
           {categories?.map((item, index) => (
-            <div key={index} className={classes.navigationButton}>
+            <div
+              key={index}
+              className={classes.navigationButton}
+              onClick={() => filterProducts(item?.id)}
+            >
               {item?.name}
             </div>
           ))}
         </Grid>
-        <Grid item xs={10} className={classes.productsGrid}>
+        <Grid item xs={12} className={classes.navigationMobile}>
+          <FormControl
+            variant="filled"
+            className={classes.formControl}
+            fullWidth
+          >
+            <InputLabel htmlFor="filled-age-native-simple">
+              Select Category
+            </InputLabel>
+            <Select
+              native
+              // value={state.age}
+              onChange={(e) => filterProducts(e.target.value)}
+              inputProps={{
+                name: "age",
+                id: "filled-age-native-simple",
+              }}
+            >
+              <option aria-label="None" value="" />
+              {categories?.map((item, index) => (
+                <option
+                  key={index}
+                  onClick={() => filterProducts(item?.id)}
+                  value={item?.id}
+                >
+                  {item?.name}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={10} className={classes.productsGrid}>
           <Grid container spacing={2}>
-            {products?.map((item, index) => (
-              <Grid item xs={3} key={index}>
+            {filteredData?.map((item, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
                 <Grid className={classes.productCard}>
                   <Typography
                     variant="h6"
