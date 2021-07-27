@@ -10,6 +10,8 @@ import {
 import React, { useState } from "react";
 import TopBar from "../../components/topBar";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import { useHistory } from "react-router-dom";
+import { Routes } from "../../router/routes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [state, setstate] = useState({
     firstName: "",
     lastName: "",
@@ -64,7 +67,7 @@ const SignUp = () => {
     ];
 
     let errors = {};
-    // let formIsValid = true;
+    let formIsValid = false;
     let data = state;
 
     required.forEach((w) => {
@@ -109,40 +112,15 @@ const SignUp = () => {
               : "",
         },
       }));
+      if (emailCheck && passwordCheck && confirmCheck) {
+        formIsValid = true;
+      }
     }
-    // if(!(state?.email) && !(state?.password)){
-    //     setstate((prevState) => ({
-    //         ...prevState,
-    //         error:{
-    //             email:true,
-    //             password:true
-    //         }
-    //     }))
-    // }
-    // else if(state?.email && state?.password){
-    //     alert(state?.email)
-    //     let emailCheck = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/.test(state?.email);
-    //     let passwordCheck = /^(?=.*\d)(?=.*?[A-Za-z])(?=.*?[0-9])(?!.*\s).{6,}$/.test(state?.password);
-    //     alert(emailCheck)
-
-    //     setstate((prevState) => ({
-    //         ...prevState,
-    //         error:{
-    //             email: !emailCheck,
-    //             password: !passwordCheck
-    //         }
-    //     }))
-    // }
-    // else if(state?.email || state?.password){
-    //     alert("2")
-    //     setstate((prevState) => ({
-    //         ...prevState,
-    //         error:{
-    //             email: !(state?.email),
-    //             password: !(state?.password)
-    //         }
-    //     }))
-    // }
+    if (formIsValid) {
+      history.push(Routes.login);
+      window?.localStorage.setItem("Email", state?.email);
+      window?.localStorage.setItem("Password", state?.password);
+    }
   };
 
   const handleChange = ({ target: { name, value } }) => {

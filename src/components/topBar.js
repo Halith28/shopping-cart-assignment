@@ -6,6 +6,8 @@ import { Typography } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import logo from "../assets/images/logo.png";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import { Link } from "react-router-dom";
+import { Routes } from "../router/routes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  link: {
+    textDecoration: "none",
+  },
 }));
 
 const TopBar = () => {
@@ -44,10 +49,14 @@ const TopBar = () => {
             <img src={logo} alt="Logo" />
           </IconButton>
           <Typography variant="h6" style={{ marginRight: 20 }}>
-            Home
+            <Link className={classes.link} to={Routes?.home}>
+              Home
+            </Link>
           </Typography>
           <Typography variant="h6" className={classes.title}>
-            Products
+            <Link className={classes.link} to={Routes?.products}>
+              Products
+            </Link>
           </Typography>
           <div style={{ width: "150px" }}>
             <div style={{ marginBottom: 20 }}>

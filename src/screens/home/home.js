@@ -1,24 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TopBar from "../../components/topBar";
 // import banner from "../../server/banners/index.get.json"
 import Carousel from "react-material-ui-carousel";
 import { Paper, Button } from "@material-ui/core";
 // import image from "../../static/images/offers/offer1.jpg"
 // import { GET } from "../helper";
-// import axios from "axios";
+import axios from "axios";
 
 const Home = () => {
   // const banners  =  GET("banners");
-  const [data] = useState([]);
+  const [data, setData] = useState([]);
 
-  // axios.get(`http://localhost:5000/banners`)
-  // .then((response) => {
-  //     console.log("gunjan",response?.data)
-  //     setData(response?.data)
-  // })
-  // .catch((error) => {
-  //     console.log(error)
-  // })
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/banners`)
+      .then((response) => {
+        console.log("allah", response?.data);
+        setData(response?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div>
@@ -28,7 +31,7 @@ const Home = () => {
           <Item key={i} item={item} />
         ))}
       </Carousel>
-      {/* <img src={image} alt="allah" /> */}
+      <img src={data[0]?.bannerImageUrl.toString()} alt="allah" />
     </div>
   );
 };
