@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   categoryGrid: {
     height: 500,
     alignItems: "center",
-    boxShadow: "0 0 25px 0 rgba(50,50,50,.3)",
+    boxShadow: "0 1px 4px rgb(0 0 0 / 30%)",
     padding: "0px 100px",
   },
   categoryImage: {
