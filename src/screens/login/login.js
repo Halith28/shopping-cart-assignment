@@ -12,7 +12,7 @@ import { Routes } from "../../router/routes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: 40,
+    marginTop: 130,
   },
   spacing: {
     marginTop: 30,
@@ -46,21 +46,6 @@ const Login = () => {
         },
       }));
     } else if (state?.email && state?.password) {
-      let emailCheck = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/.test(
-        state?.email
-      );
-      let passwordCheck =
-        /^(?=.*\d)(?=.*?[A-Za-z])(?=.*?[0-9])(?!.*\s).{6,}$/.test(
-          state?.password
-        );
-
-      setstate((prevState) => ({
-        ...prevState,
-        error: {
-          email: !emailCheck,
-          password: !passwordCheck,
-        },
-      }));
       const email = window.localStorage.getItem("Email");
       const pass = window.localStorage.getItem("Password");
       if (state?.email === email && state?.password === pass) {

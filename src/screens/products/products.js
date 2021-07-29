@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import TopBar from "../../components/topBar";
 import axios from "axios";
+import CartComp from "../../components/cart";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -18,9 +19,11 @@ const useStyles = makeStyles((theme) => ({
     // height: "calc(100vh - 110px)",
     height: "100vh",
     cursor: "pointer",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("600")]: {
       display: "none",
     },
+    position: "fixed",
+    top: 110,
   },
   navigationButton: {
     borderBottom: "1px solid rgb(128 128 128 / 36%)",
@@ -30,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     height: "calc(100vh - 110px)",
     // height: "100vh",
     padding: 10,
+    [theme.breakpoints.up("sm")]: {
+      paddingLeft: 195,
+    },
   },
   productDescription: {
     backgroundColor: "rgb(128 128 128 / 26%)",
@@ -82,6 +88,21 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const [cart, setCart] = useState([]);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = (item) => {
+    cart.push(item);
+    setOpen(true);
+    console.log(cart);
+  };
+
+  console.log(cart);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     axios
@@ -114,8 +135,8 @@ const Products = () => {
   return (
     <>
       <TopBar />
-      <Grid container>
-        <Grid item xs={12} sm={2} className={classes.navigationGrid}>
+      <Grid container style={{ marginTop: 130 }}>
+        <Grid item className={classes.navigationGrid}>
           {categories?.map((item, index) => (
             <div
               key={index}
@@ -157,7 +178,7 @@ const Products = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={10} className={classes.productsGrid}>
+        <Grid item xs={12} sm={12} className={classes.productsGrid}>
           <Grid container spacing={2}>
             {filteredData?.map((item, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
@@ -189,7 +210,11 @@ const Products = () => {
                       </Typography>
                     </Grid>
                     <Grid item xs={6} align="right">
-                      <Button variant="contained" className={classes.buyButton}>
+                      <Button
+                        variant="contained"
+                        className={classes.buyButton}
+                        onClick={() => handleOpen(item)}
+                      >
                         Buy Now
                       </Button>
                     </Grid>
@@ -198,6 +223,7 @@ const Products = () => {
               </Grid>
             ))}
           </Grid>
+          <CartComp open={open} handleClose={handleClose} body={cart} />
         </Grid>
       </Grid>
     </>

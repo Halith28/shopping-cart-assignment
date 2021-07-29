@@ -15,7 +15,7 @@ import { Routes } from "../../router/routes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: 40,
+    marginTop: 130,
   },
   spacing: {
     marginTop: 30,

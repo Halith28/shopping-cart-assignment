@@ -38,7 +38,7 @@ const TopBar = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
@@ -62,10 +62,16 @@ const TopBar = () => {
             <div style={{ marginBottom: 20 }}>
               <div style={{ display: "inline" }}>
                 <div style={{ display: "inline-block", width: "50%" }}>
-                  Signin
+                  {/* <Typography variant="subtitle1">Signin</Typography> */}
+                  <Link className={classes.link} to={Routes?.login}>
+                    Signin
+                  </Link>
                 </div>
                 <div style={{ display: "inline-block", width: "50%" }}>
-                  Register
+                  {/* <Typography variant="subtitle1">Register</Typography> */}
+                  <Link className={classes.link} to={Routes?.signUp}>
+                    Register
+                  </Link>
                 </div>
               </div>
             </div>

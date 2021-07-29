@@ -63,7 +63,7 @@ const Home = () => {
   return (
     <div>
       <TopBar />
-      <Grid style={{ margin: "20px 0px" }}>
+      <Grid style={{ margin: "130px 0px 20px 0px" }}>
         <Carousel>
           {data?.map((item, i) => (
             <Item key={i} item={item} />
