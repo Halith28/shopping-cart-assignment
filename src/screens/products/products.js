@@ -88,7 +88,7 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [cart] = useState([]);
 
   const [open, setOpen] = React.useState(false);
 

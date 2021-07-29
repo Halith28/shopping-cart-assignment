@@ -9,7 +9,7 @@ import {
   Avatar,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
