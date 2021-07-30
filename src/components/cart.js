@@ -9,14 +9,28 @@ import {
   Avatar,
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    borderRadius: 0,
+    backgroundColor: "#e0e0e0",
+    height: "100vh",
+    [theme.breakpoints.up("600")]: {
+      position: "absolute",
+      bottom: 0,
+      right: 100,
+      height: "80vh",
+      width: "400px",
+    },
+  },
   cartBody: {
-    height: "360px",
+    height: "calc(80vh - 150px)",
     overflow: "auto",
+    [theme.breakpoints.down("600")]: {
+      height: "calc(100vh - 150px)",
+    },
   },
   cartItem: {
     padding: 10,
@@ -44,25 +58,52 @@ const useStyles = makeStyles((theme) => ({
     margin: 10,
     padding: 10,
   },
+  actionArea: {
+    [theme.breakpoints.down("400")]: {
+      "& .MuiAvatar-root": {
+        height: 22,
+        width: 22,
+      },
+    },
+  },
+  emptyCart: {
+    height: "calc(80vh - 125px)",
+    [theme.breakpoints.down("600")]: {
+      height: "calc(100vh - 125px)",
+    },
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 }));
 
 const CartComp = (props) => {
   const classes = useStyles();
-  const cartData = props?.body.map((obj) => ({ ...obj, count: 1 }));
+  //   const cartData = props?.body.map((obj) => ({ ...obj, count: 1 }));
+  const [cart, setcart] = useState([]);
   console.log(props?.body);
 
-  const handleCount = (item, index) => {
-    cartData[index].count = cartData[index].count + 1;
-    // setcartData({ ...cartData });
-    // setcartData((prevState) => ({
-    //   ...prevState,
-    //   [index]: {
-    //     ...prevState[index],
-    //     count: prevState[index].count + 1,
-    //   },
-    // }));
-    console.log(cartData);
-  };
+  useEffect(() => {
+    setcart(props?.body);
+  }, [props?.refresh, props?.body]);
+
+  //   const handleCount = (item, index) => {
+  //     // debugger;
+  //     let sample = cart;
+  //     sample[index].count = sample[index].count + 1;
+  //     // setcartData({ ...cartData });
+  //     // setcartData((prevState) => ({
+  //     //   ...prevState,
+  //     //   [index]: {
+  //     //     ...prevState[index],
+  //     //     count: prevState[index].count + 1,
+  //     //   },
+  //     // }));
+  //     setcart(sample);
+  //     console.log(cart);
+  //   };
+  //   console.log("sda", cart[0].count);
+  //   console.log(cart);
 
   return (
     <Modal
@@ -76,20 +117,10 @@ const CartComp = (props) => {
         // width: "100px",
       }}
     >
-      <Paper
-        style={{
-          position: "absolute",
-          bottom: 0,
-          right: 100,
-          height: "80vh",
-          width: "400px",
-          borderRadius: 0,
-          backgroundColor: "#e0e0e0",
-        }}
-      >
+      <Paper className={classes.root}>
         <Grid
           container
-          justify="space-between"
+          justifyContent="space-between"
           style={{
             backgroundColor: "black",
             color: "white",
@@ -104,66 +135,103 @@ const CartComp = (props) => {
             </IconButton>
           </Grid>
         </Grid>
-        <div className={classes.cartBody}>
-          {cartData.map((item, index) => (
-            <Grid container className={classes.cartItem} key={index}>
-              <Grid item xs={3}>
-                <img
-                  src={item?.imageURL}
-                  alt="image123"
-                  height="70px"
-                  width="70px"
-                />
-              </Grid>
-              <Grid item xs={7}>
-                <Typography variant="subtitle2" style={{ fontWeight: 600 }}>
-                  {item?.name}
-                </Typography>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <div style={{ margin: "0px 5px" }}>
-                    <Avatar>
-                      <IconButton onClick={() => handleCount(item, index)}>
-                        +
+        {cart?.length > 0 ? (
+          <div className={classes.cartBody}>
+            {cart?.map((item, index) => (
+              <Grid container className={classes.cartItem} key={index}>
+                <Grid item xs={3}>
+                  <img
+                    src={item?.imageURL}
+                    alt="image123"
+                    height="70px"
+                    width="70px"
+                  />
+                </Grid>
+                <Grid item xs={7}>
+                  <Typography variant="subtitle2" style={{ fontWeight: 600 }}>
+                    {item?.name}
+                  </Typography>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    className={classes.actionArea}
+                  >
+                    <div style={{ margin: "0px 5px" }}>
+                      <Avatar>
+                        <IconButton
+                          onClick={() => props?.handleIncrement(item, index)}
+                        >
+                          +
+                        </IconButton>
+                      </Avatar>
+                    </div>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ margin: "0px 5px" }}
+                    >
+                      {item?.count}
+                    </Typography>
+
+                    <Avatar style={{ margin: "0px 5px" }}>
+                      <IconButton
+                        onClick={() => props?.handleDecrement(item, index)}
+                      >
+                        -
                       </IconButton>
                     </Avatar>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ margin: "0px 5px" }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ margin: "0px 5px" }}
+                    >
+                      Rs.{item?.price}
+                    </Typography>
                   </div>
-                  <Typography variant="subtitle1" style={{ margin: "0px 5px" }}>
-                    {item?.count}
+                </Grid>
+                <Grid item xs={2} style={{ alignSelf: "center" }}>
+                  <Typography variant="subtitle1" align="center">
+                    Rs.{item?.price * item?.count}
                   </Typography>
-
-                  <Avatar style={{ margin: "0px 5px" }}>
-                    <IconButton>-</IconButton>
-                  </Avatar>
-                  <Typography variant="subtitle1" style={{ margin: "0px 5px" }}>
-                    X
-                  </Typography>
-                  <Typography variant="subtitle1" style={{ margin: "0px 5px" }}>
-                    Rs.{item?.price}
-                  </Typography>
-                </div>
+                </Grid>
               </Grid>
-              <Grid item xs={2} style={{ alignSelf: "center" }}>
-                <Typography variant="subtitle1" align="center">
-                  Rs.{item?.price * item?.count}
-                </Typography>
-              </Grid>
-            </Grid>
-          ))}
+            ))}
 
-          <div className={classes.slogan}>
-            <Typography variant="subtitle2">
-              You won't find it cheaper anywhere
-            </Typography>
+            <div className={classes.slogan}>
+              <Typography variant="subtitle2">
+                You won't find it cheaper anywhere
+              </Typography>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={classes.emptyCart}>
+            <div>
+              <Typography variant="h6" align="center">
+                No items in your cart
+              </Typography>
+              <Typography variant="subtitle1" align="center">
+                Your favourite items are just a click away
+              </Typography>
+            </div>
+          </div>
+        )}
 
         <div className={classes.checkout}>
-          <Typography variant="caption" align="center">
-            Promo code can be applied on payment page
-          </Typography>
+          {!(cart?.length === 0) && (
+            <Typography variant="caption" align="center">
+              Promo code can be applied on payment page
+            </Typography>
+          )}
+
           {/* <Grid
             container
-            justify="space-between"
+            justifyContent="space-between"
             className={classes.checkoutButton}
           >
             <Grid item>
@@ -180,20 +248,32 @@ const CartComp = (props) => {
             fullWidth
             className={classes.checkoutButton}
           >
-            <Grid
-              container
-              justify="space-between"
-              //   className={classes.checkoutButton}
-            >
-              <Grid item>
-                <Typography variant="subtitle1">Proceed to checkout</Typography>
+            {!(cart?.length === 0) ? (
+              <Grid
+                container
+                justifyContent="space-between"
+                //   className={classes.checkoutButton}
+              >
+                <Grid item>
+                  <Typography variant="subtitle1">
+                    Proceed to checkout
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="subtitle1">
+                    Rs.
+                    {cart?.length > 0 &&
+                      cart
+                        ?.map((item) => item?.count * item?.price)
+                        ?.reduce((item, b) => item + b)}{" "}
+                    <span>{`>`}</span>
+                    {/* {props?.body[0]?.price} */}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Typography variant="subtitle1">
-                  {props?.body[0]?.price}
-                </Typography>
-              </Grid>
-            </Grid>
+            ) : (
+              <div onClick={props?.handleClose}>Start Shopping</div>
+            )}
           </Button>
         </div>
       </Paper>

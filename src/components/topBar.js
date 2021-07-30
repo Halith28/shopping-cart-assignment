@@ -22,6 +22,11 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: 100,
       },
     },
+    [theme.breakpoints.down("570")]: {
+      "& .MuiTypography-h6": {
+        fontSize: ".75rem",
+      },
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -32,9 +37,32 @@ const useStyles = makeStyles((theme) => ({
   link: {
     textDecoration: "none",
   },
+  logoImage: {
+    [theme.breakpoints.down("570")]: {
+      width: "50px",
+    },
+  },
+  cartGrid: {
+    backgroundColor: "#8080805c",
+    height: "70px",
+    [theme.breakpoints.down("570")]: {
+      height: 50,
+    },
+  },
+  thirdGrid: {
+    width: 150,
+    [theme.breakpoints.down("570")]: {
+      width: 100,
+    },
+  },
+  signGrid: {
+    [theme.breakpoints.up("570")]: {
+      marginBottom: 20,
+    },
+  },
 }));
 
-const TopBar = () => {
+const TopBar = (props) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -46,7 +74,7 @@ const TopBar = () => {
             color="inherit"
             aria-label="menu"
           >
-            <img src={logo} alt="Logo" />
+            <img src={logo} alt="Logo" className={classes.logoImage} />
           </IconButton>
           <Typography variant="h6" style={{ marginRight: 20 }}>
             <Link className={classes.link} to={Routes?.home}>
@@ -58,8 +86,8 @@ const TopBar = () => {
               Products
             </Link>
           </Typography>
-          <div style={{ width: "150px" }}>
-            <div style={{ marginBottom: 20 }}>
+          <div className={classes.thirdGrid}>
+            <div className={classes.signGrid}>
               <div style={{ display: "inline" }}>
                 <div style={{ display: "inline-block", width: "50%" }}>
                   {/* <Typography variant="subtitle1">Signin</Typography> */}
@@ -75,20 +103,22 @@ const TopBar = () => {
                 </div>
               </div>
             </div>
-            <div style={{ backgroundColor: "#8080805c", height: "70px" }}>
+            <div className={classes.cartGrid} onClick={props?.handleCart}>
               <div
                 style={{
-                  display: "inline",
+                  display: "flex",
                   alignItems: "center",
                   height: "100%",
-                  justifyItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <div style={{ display: "inline-block" }}>
-                  <ShoppingCartIcon />
+                  <ShoppingCartIcon style={{ color: "#bf2957" }} />
                 </div>
                 <div style={{ display: "inline-block" }}>
-                  <Typography variant="subtitle1">0 items</Typography>
+                  <Typography variant="subtitle1">
+                    {props?.cartCount ? props?.cartCount : 0} items
+                  </Typography>
                 </div>
               </div>
             </div>

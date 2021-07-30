@@ -9,10 +9,13 @@ import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   categoryGrid: {
-    height: 500,
+    // height: 500,
     alignItems: "center",
     boxShadow: "0 1px 4px rgb(0 0 0 / 30%)",
-    padding: "0px 100px",
+    padding: "10px 100px",
+    [theme.breakpoints.down("600")]: {
+      padding: "10px 20px",
+    },
   },
   categoryImage: {
     width: "100%",
@@ -31,6 +34,23 @@ const useStyles = makeStyles((theme) => ({
     display: "flex !important",
     justifyContent: "center",
     marginTop: 10,
+  },
+  carousel: {
+    margin: "130px 0px 20px 0px",
+    [theme.breakpoints.down("570")]: {
+      margin: "75px 0px 20px 0px",
+    },
+  },
+  carouselItem: {
+    [theme.breakpoints.down("400")]: {
+      width: window.innerWidth,
+      height: "20vh",
+    },
+  },
+  carouselPaper: {
+    [theme.breakpoints.up("400")]: {
+      padding: "0 100px",
+    },
   },
 }));
 
@@ -63,7 +83,7 @@ const Home = () => {
   return (
     <div>
       <TopBar />
-      <Grid style={{ margin: "130px 0px 20px 0px" }}>
+      <Grid className={classes.carousel}>
         <Carousel>
           {data?.map((item, i) => (
             <Item key={i} item={item} />
@@ -72,7 +92,7 @@ const Home = () => {
       </Grid>
 
       {categories?.map((item, index) => (
-        <Grid container className={classes.categoryGrid}>
+        <Grid container className={classes.categoryGrid} key={index}>
           <Grid item xs={6}>
             <img
               src={item?.imageUrl}
@@ -104,9 +124,16 @@ const Home = () => {
 };
 
 function Item(props) {
+  const classes = useStyles();
   return (
-    <Paper style={{ padding: "0px 100px" }} elevation={0}>
-      <img src={props?.item?.bannerImageUrl} alt="logo" />
+    <Paper className={classes.carouselPaper} elevation={0}>
+      <img
+        src={props?.item?.bannerImageUrl}
+        alt="logo"
+        height="100%"
+        width="100%"
+        className={classes.carouselItem}
+      />
     </Paper>
   );
 }

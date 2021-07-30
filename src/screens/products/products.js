@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
   productCard: {
     borderBottom: "1px dashed rgb(128 128 128 / 26%)",
     padding: 5,
+    "box-shadow":
+      "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+    // "-webkit-box-shadow": "inset 0 0 8px rgba(0,0,0, 0.25)",
   },
   productFooter: {
     marginTop: 10,
@@ -71,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
     "& .MuiInputBase-input": {
-      color: "black",
+      color: "white",
       backgroundColor: "#bf2957",
     },
     "& .MuiSelect-icon": {
@@ -81,6 +84,12 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
     },
   },
+  content: {
+    marginTop: 130,
+    [theme.breakpoints.down("570")]: {
+      marginTop: 75,
+    },
+  },
 }));
 
 const Products = () => {
@@ -88,12 +97,18 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [cart] = useState([]);
-
+  const [cart, setCart] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [open, setOpen] = React.useState(false);
 
+  const handleCart = () => {
+    setOpen(true);
+  };
+
   const handleOpen = (item) => {
-    cart.push(item);
+    let sample = item;
+    sample.count = 1;
+    cart.push(sample);
     setOpen(true);
     console.log(cart);
   };
@@ -131,11 +146,30 @@ const Products = () => {
     setFilteredData(filteredData);
   }
 
+  const handleIncrement = (item, index) => {
+    // debugger;
+    let sample = cart;
+    sample[index].count = sample[index].count + 1;
+    setCart(sample);
+    setRefresh(!refresh);
+  };
+
+  const handleDecrement = (item, index) => {
+    let sample = cart;
+    if (sample[index].count < 2) {
+      sample.splice(index, 1);
+    } else {
+      sample[index].count = sample[index].count - 1;
+    }
+    setCart(sample);
+    setRefresh(!refresh);
+  };
+
   console.log(products);
   return (
     <>
-      <TopBar />
-      <Grid container style={{ marginTop: 130 }}>
+      <TopBar handleCart={handleCart} cartCount={cart?.length} />
+      <Grid container className={classes.content}>
         <Grid item className={classes.navigationGrid}>
           {categories?.map((item, index) => (
             <div
@@ -165,12 +199,12 @@ const Products = () => {
                 id: "filled-age-native-simple",
               }}
             >
-              <option aria-label="None" value="" />
               {categories?.map((item, index) => (
                 <option
                   key={index}
                   onClick={() => filterProducts(item?.id)}
                   value={item?.id}
+                  style={{ backgroundColor: "rgb(128 128 128 / 36%)" }}
                 >
                   {item?.name}
                 </option>
@@ -201,7 +235,7 @@ const Products = () => {
                   </div>
                   <Grid
                     container
-                    justify="space-between"
+                    justifyContent="space-between"
                     className={classes.productFooter}
                   >
                     <Grid item xs={6}>
@@ -223,7 +257,14 @@ const Products = () => {
               </Grid>
             ))}
           </Grid>
-          <CartComp open={open} handleClose={handleClose} body={cart} />
+          <CartComp
+            open={open}
+            handleClose={handleClose}
+            body={cart}
+            handleIncrement={handleIncrement}
+            handleDecrement={handleDecrement}
+            refresh={refresh}
+          />
         </Grid>
       </Grid>
     </>
