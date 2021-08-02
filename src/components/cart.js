@@ -11,6 +11,7 @@ import {
 import { Close } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import lowerPrice from "../components/lowest-price.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -204,7 +205,13 @@ const CartComp = (props) => {
             ))}
 
             <div className={classes.slogan}>
-              <Typography variant="subtitle2">
+              <Typography variant="subtitle2" align="center">
+                <img
+                  src={lowerPrice}
+                  alt="lowerPrice"
+                  height="50px "
+                  width="100px"
+                />
                 You won't find it cheaper anywhere
               </Typography>
             </div>

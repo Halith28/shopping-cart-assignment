@@ -58,7 +58,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
-    "server": "canned -p 5000 ./server"
+    "dev": "canned -p 5000 ./server"
   },
   "eslintConfig": {
     "extends": [
